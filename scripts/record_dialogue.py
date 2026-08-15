@@ -37,6 +37,14 @@ def main() -> int:
     if repo_result.returncode:
         raise RuntimeError("Run this script inside a Git repository")
     repo = pathlib.Path(repo_result.stdout.strip())
+    remotes = git(repo, "remote")
+    if remotes.returncode:
+        raise RuntimeError(remotes.stderr)
+    if remotes.stdout.strip():
+        raise RuntimeError(
+            "Refusing to write private dialogue into a repository with a Git remote. "
+            "Use a separate local-only private repository."
+        )
     now = dt.datetime.now(dt.timezone.utc).astimezone()
     digest = hashlib.sha256((user + "\0" + assistant).encode()).hexdigest()[:12]
     log = repo / "private" / "logs" / f"{now.date()}.jsonl"

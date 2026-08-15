@@ -13,8 +13,9 @@ Create a private, evidence-grounded style mirror rather than a digital replaceme
 
 1. Read [evidence-guidelines.md](references/evidence-guidelines.md) before processing sources.
 2. Separate direct session transcripts, user corrections, public professional writing, private writing, AI summaries, and uncertain transcription.
-3. Store raw material only under `private/` or outside the repository. Never add it to Git or upload it.
-4. Use `scripts/build_evidence.py` to generate a local candidate report, then manually turn only well-supported patterns into private references.
+3. Store raw material only under `private/` or outside the repository. Never add it to a remote or upload it.
+4. Use `scripts/register_source.py` before analysing a source; it records local metadata without copying content.
+5. Use `scripts/build_evidence.py` to generate a local candidate report, then manually turn only well-supported patterns into private references.
 
 ## Response workflow
 
@@ -35,7 +36,7 @@ Read [response-framework.md](references/response-framework.md) when responding. 
 
 ## Calibration
 
-When the user says a response is inaccurate, write a dated correction with context and confidence in a local private file. Promote a correction into a stable rule only after it is supported by repeated, independent evidence.
+When the user says a response is inaccurate, write a dated correction with context and confidence in a local private file by using `scripts/add_correction.py`. Promote a correction into a stable rule only after it is supported by repeated, independent evidence.
 
 ## Optional local dialogue commits
 
@@ -45,4 +46,4 @@ To retain a local audit trail, prepare the final user and assistant texts, then 
 python scripts/record_dialogue.py --user-file <user.txt> --assistant-file <assistant.txt>
 ```
 
-The script writes under `private/logs/` and creates a local commit. Do not push that commit to a public remote.
+The script writes under `private/logs/` and creates a local commit. It refuses to run when the repository has a Git remote; use a local-only private copy.
