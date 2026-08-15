@@ -10,6 +10,9 @@
 | --- | --- | --- |
 | 会谈复盘 | 将事件、体验、猜测分开；提出一个可继续探索的问题 | 当前对话 |
 | 风格提取 | 识别提问顺序、反映方式、节奏、边界与修复方式 | `private/evidence.json` |
+| 长期议题地图 | 按当前影响与紧迫性选择焦点，保留历史变化 | 私有议题文档 |
+| 动态概念化 | 区分事件、体验、重复模式、工作假设与行动实验 | 私有概念化文档 |
+| IFS／parts 地图 | 沿用用户命名，探索保护意图并帮助去融合 | 私有 parts 文档 |
 | 材料登记 | 记录来源类型、校验值、权限说明；不复制原文件 | `private/sources.jsonl` |
 | 图片／PDF 辅助 | 在 Codex 对话中附上你有权处理的文件，提取可见文字后再人工核查 | 当前对话 + 本地证据报告 |
 | 纠正机制 | 将“这不像她/他”的反馈记成可审计的本地校准项 | `private/corrections.jsonl` |
@@ -87,12 +90,29 @@ python scripts/add_correction.py --text "先确认体验，再讨论行为链条
 
 只有当同一模式得到多份独立材料支持时，才把它升级为稳定的私人规则。
 
+### 5. 建立长期个案索引（可选）
+
+如果你已有议题清单、成长史、概念化、IFS/parts 地图或咨询偏好，可以只登记路径和校验值：
+
+```powershell
+python scripts/register_context_sources.py `
+  --issues private/issues.md `
+  --history private/history.md `
+  --formulation private/formulation.md `
+  --parts private/parts.md `
+  --prompt private/preferences.md
+```
+
+正文不会被复制到索引。Skill 会按任务选择来源：确定焦点读议题清单，追溯形成史读成长史，梳理循环读概念化，做 parts work 才读 parts 地图。旧文档中的 AI 解释只能作为 working hypothesis（工作假设），不能压过你当前确认的体验。
+
 ## 支持的材料来源
 
 | 来源 | 可做什么 | 建议输入 | 说明 |
 | --- | --- | --- | --- |
 | 咨询逐字稿／访谈记录 | 分析回应顺序与提问风格 | `.md`、`.txt` | 优先使用有清晰说话者的版本 |
 | 私人笔记 | 记录你自己的体验与纠正 | `.md`、`.txt` | 不把你的记忆写成对方意图的事实 |
+| 议题／成长史／概念化 | 建立可更新的长期工作地图 | `.md`、`.txt` | 病因与人格解释必须标为假设 |
+| IFS／parts 地图 | 沿用已有隐喻探索保护功能 | `.md`、`.json` | 不把 part 当作诊断或完整人格 |
 | 用户导出的结构化资料 | 作为待核查线索 | `.json` | 先删除第三方身份与敏感字段 |
 | 图片／聊天截图 | 提取可见文字、标注 OCR 不确定处 | `.png`、`.jpg`、`.webp` | 附到当前对话；不要推送原图 |
 | PDF／扫描件 | 提取并人工复核文字 | `.pdf` | 附到当前对话；再保存核查后的文本 |
@@ -110,6 +130,8 @@ python scripts/add_correction.py --text "先确认体验，再讨论行为链条
 | 回应模式 | 开场、反映、提问、假设、挑战、收束、边界 | “一次只问一个可回答的问题” |
 
 每条规则都应带有来源日期（可泛化）、证据强度和不确定性说明。不要保留可识别的姓名、原句、地点、联系方式或第三方隐私。
+
+结构化咨询模式采用以下会谈弧线：第一行写可修正的 `【当前焦点】`；协商本轮更需要陪伴、共同理解、温和面质还是现实行动；一次只追一个关键问题；每轮最多给 1–2 个小步骤；结尾回到焦点并邀请补充或纠正。完整规则见 [longitudinal-workflow.md](references/longitudinal-workflow.md)。
 
 运行逻辑是：
 
@@ -158,9 +180,11 @@ former-therapist-mirror/
 ├── SKILL.md                         # Codex 入口与工作边界
 ├── references/
 │   ├── evidence-guidelines.md       # 来源、证据与最小化原则
-│   └── response-framework.md        # 通用反思回应框架
+│   ├── response-framework.md        # 通用反思回应框架
+│   └── longitudinal-workflow.md      # 长期议题、概念化与 IFS 工作流
 ├── scripts/
 │   ├── register_source.py           # 本地来源登记，不复制原文件
+│   ├── register_context_sources.py  # 长期个案文档的本地路径索引
 │   ├── build_evidence.py            # 文本候选证据报告
 │   ├── add_correction.py            # 私有校准记录
 │   └── record_dialogue.py           # 无 remote 时的本地对话提交
