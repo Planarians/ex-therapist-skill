@@ -1,0 +1,14 @@
+private/
+.local/
+logs/
+*.sqlite3
+*.db
+*.token
+*.key
+*.pem
+oauth_app.json
+mastodon-user-token.json
+source-data/
+raw/
+__pycache__/
+*.pyc
